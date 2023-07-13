@@ -10,6 +10,11 @@ public class Main {
     public static final int INITIAL_DELAY = 5;
     public static final int ACTION_PERIOD = 1;
 
+    /**
+     * The main entry point of the application.
+     *
+     * @param args the command line arguments
+     */
     public static void main(String[] args) {
         String rootPath = Thread.currentThread().getContextClassLoader().getResource("").getPath();
         String appConfigPath = rootPath + "application.yml";
@@ -40,6 +45,13 @@ public class Main {
         consumerExecutor.submit(consumer);
     }
 
+    /**
+     * Loads the application properties from the specified file path.
+     *
+     * @param appConfigPath the path to the application configuration file
+     * @return the loaded properties
+     * @throws RuntimeException if an error occurs while loading the properties
+     */
     private static Properties loadAppProperties(String appConfigPath) {
         Properties appProps = new Properties();
         try {
