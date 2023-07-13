@@ -6,14 +6,11 @@ import java.util.concurrent.Semaphore;
 
 public class Producer implements Runnable {
     private final Semaphore rateLimiter;
-    private Queue<Integer> queue;
-
-    private int messagesPerMinute;
+    private final Queue<Integer> queue;
+    private final int messagesPerMinute;
 
     public Producer(Queue<Integer> queue, int messagesPerMinute) {
-
         this.messagesPerMinute = messagesPerMinute;
-
         this.queue = queue;
         this.rateLimiter = new Semaphore(messagesPerMinute);
     }
@@ -31,7 +28,8 @@ public class Producer implements Runnable {
                 Thread.sleep(60000 / messagesPerMinute);
                 rateLimiter.release();
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                System.err.println("Поток был прерван.");
+                // TODO Реализовать логику на случай прерывания потока.
             }
         }
     }
