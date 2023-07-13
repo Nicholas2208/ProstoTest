@@ -18,15 +18,16 @@ public class Main {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        int producePerMinute = Integer.parseInt(appProps.getProperty("produce-messages-per-minute"));
-        int consumePerMinute = Integer.parseInt(appProps.getProperty("consume-messages-per-minute"));
 
+        int producePerMinute = Integer.parseInt(appProps.getProperty("produce-messages-per-minute"));
+        float consumerLinger = Float.parseFloat(appProps.getProperty("consumer-linger"));
+        float consumePerMinute = producePerMinute * consumerLinger;
 
         BlockingQueue<Integer> queue = new ArrayBlockingQueue<>(10);
         ScheduledExecutorService producerExecutor = Executors.newSingleThreadScheduledExecutor();
         ExecutorService consumerExecutor = Executors.newSingleThreadExecutor();
         Producer producer = new Producer(queue, producePerMinute);
-        Consumer consumer = new Consumer(queue, consumePerMinute);
+        Consumer consumer = new Consumer(queue, (int) consumePerMinute);
         producerExecutor.scheduleAtFixedRate(producer, INITIAL_DELAY, PERIOD, TimeUnit.SECONDS);
         consumerExecutor.submit(consumer);
 
